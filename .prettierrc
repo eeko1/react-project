@@ -3,6 +3,6 @@
   "singleQuote": true,
   "tabWidth": 2,
   "useTabs": false,
-  "bracketSpacing": false
-  plugins: ["prettier-plugin-tailwindcss"],
+  "bracketSpacing": false,
+  "plugins": ["prettier-plugin-tailwindcss"]
 }

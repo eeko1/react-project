@@ -6,8 +6,8 @@ import {
   MediaItemWithOwner,
   User,
 } from '../types/DBTypes';
-import {fetchData} from '../lib/functions';
-import {Credentials} from '../types/LocalTypes';
+import {fetchData, makeQuery} from '../lib/functions';
+import {Credentials, GraphQLResponse} from '../types/LocalTypes';
 import {
   LoginResponse,
   MediaResponse,
@@ -15,30 +15,41 @@ import {
   UploadResponse,
   UserResponse,
 } from '../types/MessageTypes';
+import {useUpdateContext} from './ContextHooks';
 
 const useMedia = () => {
   const [mediaArray, setMediaArray] = useState<MediaItemWithOwner[]>([]);
+  const {update} = useUpdateContext();
 
   const getMedia = async () => {
     try {
-      const mediaItems = await fetchData<MediaItem[]>(
-        import.meta.env.VITE_MEDIA_API + '/media',
-      );
-      // Get usernames (file owners) for all media files from auth api
-      const itemsWithOwner: MediaItemWithOwner[] = await Promise.all(
-        mediaItems.map(async (item) => {
-          const owner = await fetchData<User>(
-            import.meta.env.VITE_AUTH_API + '/users/' + item.user_id,
-          );
-          const itemWithOwner: MediaItemWithOwner = {
-            ...item,
-            username: owner.username,
-          };
-          return itemWithOwner;
-        }),
-      );
-      setMediaArray(itemsWithOwner);
-      console.log('mediaArray updated:', itemsWithOwner);
+      const query = `
+      query MediaItems {
+        mediaItems {
+          media_id
+          user_id
+          owner {
+            username
+            user_id
+          }
+          filename
+          thumbnail
+          filesize
+          media_type
+          title
+          description
+          created_at
+          comments_count
+          average_rating
+        }
+      }
+    `;
+
+      const result = await makeQuery<
+        GraphQLResponse<{mediaItems: MediaItemWithOwner[]}>,
+        undefined
+      >(query);
+      setMediaArray(result.data.mediaItems);
     } catch (error) {
       console.error('getMedia failed', error);
     }
@@ -46,7 +57,7 @@ const useMedia = () => {
 
   useEffect(() => {
     getMedia();
-  }, []);
+  }, [update]);
 
   const postMedia = (
     file: UploadResponse,
@@ -82,7 +93,24 @@ const useMedia = () => {
     );
   };
 
-  return {mediaArray, postMedia};
+  const deleteMedia = async (media_id: string, token: string) => {
+    const query = `mutation DeleteMediaItem($mediaId: ID!) {
+      deleteMediaItem(media_id: $mediaId) {
+        message
+      }
+    }`;
+
+    const variables = {mediaId: media_id};
+
+    const deleteResult = await makeQuery<
+      GraphQLResponse<{deleteMediaItem: MessageResponse}>,
+      {mediaId: string}
+    >(query, variables, token);
+
+    return deleteResult.data.deleteMediaItem;
+  };
+
+  return {mediaArray, postMedia, deleteMedia};
 };
 
 const useUser = () => {
@@ -143,16 +171,27 @@ const useUser = () => {
 
 const useAuthentication = () => {
   const postLogin = async (creds: Credentials) => {
-    return await fetchData<LoginResponse>(
-      import.meta.env.VITE_AUTH_API + '/auth/login',
-      {
-        method: 'POST',
-        body: JSON.stringify(creds),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    );
+    const query = `
+    mutation Login($username: String!, $password: String!) {
+      login(username: $username, password: $password) {
+        token
+        message
+        user {
+          user_id
+          username
+          email
+          level_name
+          created_at
+        }
+      }
+    }
+  `;
+    const loginResult = await makeQuery<
+      GraphQLResponse<{login: LoginResponse}>,
+      Credentials
+    >(query, creds);
+    console.log(loginResult);
+    return loginResult.data.login;
   };
 
   return {postLogin};

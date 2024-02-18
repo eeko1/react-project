@@ -1,31 +1,9 @@
-import {MediaItem, MediaItemWithOwner, User} from '../types/DBTypes';
 import MediaRow from '../components/MediaRow';
-import {useEffect, useState} from 'react';
-import {fetchData} from '../lib/functions';
+import {useMedia} from '../hooks/graphQLHooks';
+// import {useMedia} from '../hooks/apiHooks';
 
 const Home = () => {
-  const [mediaArray, setMediaArray] = useState<MediaItemWithOwner[]>([]);
-  //console.log(mediaArray);
-
-  const getMedia = async () => {
-    try {
-      const mediaItems = await fetchData<MediaItem[]>(import.meta.env.VITE_MEDIA_API + '/media');
-      // Get usernames (file owners) for all media files from auth api
-      const itemsWithOwner: MediaItemWithOwner[] = await Promise.all(mediaItems.map(async (item) => {
-        const owner = await fetchData<User>(import.meta.env.VITE_AUTH_API + '/users/' + item.user_id);
-        const itemWithOwner: MediaItemWithOwner = {...item, username: owner.username};
-        return itemWithOwner;
-      }));
-      setMediaArray(itemsWithOwner);
-      console.log('mediaArray updated:', itemsWithOwner);
-    } catch (error) {
-      console.error('getMedia failed', error);
-    }
-  };
-
-  useEffect(() => {
-    getMedia();
-  }, []);
+  const {mediaArray} = useMedia();
 
   return (
     <>
@@ -33,21 +11,19 @@ const Home = () => {
       <table>
         <thead>
           <tr>
-            <th>Thumbnail</th>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Created</th>
-            <th>Size</th>
-            <th>Type</th>
-            <th>Owner</th>
+            <th className="w-3/12 border border-slate-700">Thumbnail</th>
+            <th className="w-1/12 border border-slate-700">Title</th>
+            <th className="w-2/12 border border-slate-700">Description</th>
+            <th className="w-1/12 border border-slate-700">Created</th>
+            <th className="w-1/12 border border-slate-700">Size</th>
+            <th className="w-1/12 border border-slate-700">Type</th>
+            <th className="w-1/12 border border-slate-700">Owner</th>
+            <th className="w-2/12 border border-slate-700">Actions</th>
           </tr>
         </thead>
         <tbody>
           {mediaArray.map((item) => (
-            <MediaRow
-              key={item.media_id}
-              item={item}
-            />
+            <MediaRow key={item.media_id} item={item} />
           ))}
         </tbody>
       </table>
