@@ -32,7 +32,10 @@ const useMedia = () => {
           );
           const itemWithOwner: MediaItemWithOwner = {
             ...item,
-            username: owner.username,
+            username: owner.username, // Add the missing username property
+            owner: owner,
+            likes_count: 0, // Replace with the actual likes count
+            comments_count: 0, // Replace with the actual comments count
           };
           return itemWithOwner;
         }),

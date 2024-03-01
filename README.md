@@ -1,6 +1,6 @@
 # Hybrid Apps - React example
 
-Open [this link in browser](https://users.metropolia.fi/~eemiko/hybrid-week3) to see the app in action.
+Open [this link in browser](https://users.metropolia.fi/~eemiko/react-graphql/) to see the app in action.
 
 ---
 

@@ -108,6 +108,7 @@ type TokenContent = Pick<User, 'user_id'> & Pick<UserLevel, 'level_name'>;
 
 // FOR GRAPHQL
 type MediaItemWithOwner = MediaItem & {
+  username: string;
   owner: User;
   tags?: Tag[];
   likes?: Like[];

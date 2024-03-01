@@ -43,7 +43,7 @@ const Likes = ({item}: {item: MediaItemWithOwner}) => {
       return;
     }
     try {
-      const userLike = await getUserLike(item.media_id, token);
+      const userLike = await getUserLike(parseInt(item.media_id), token);
       likeDispatch({type: 'like', like: userLike});
     } catch (e) {
       likeDispatch({type: 'like', like: null});
@@ -56,7 +56,7 @@ const Likes = ({item}: {item: MediaItemWithOwner}) => {
   // get like count
   const getLikeCount = async () => {
     try {
-      const countResponse = await getCountByMediaId(item.media_id);
+      const countResponse = await getCountByMediaId(parseInt(item.media_id));
       likeDispatch({type: 'setLikeCount', count: countResponse.count});
     } catch (e) {
       likeDispatch({type: 'setLikeCount', count: 0});
@@ -78,7 +78,7 @@ const Likes = ({item}: {item: MediaItemWithOwner}) => {
       // If user has liked the media, delete the like. Otherwise, post the like.
       if (likeState.userLike) {
         // delete the like and dispatch the new like count to the state.
-        await deleteLike(likeState.userLike.like_id, token);
+        await deleteLike(parseInt(likeState.userLike.like_id), token);
         // Dispatching is already done in the getLikes and getLikeCount functions.
         // other way, is to do update locally after succesfull api call
         // for deleting it's ok because there is no need to get any data from the api
@@ -86,7 +86,7 @@ const Likes = ({item}: {item: MediaItemWithOwner}) => {
         likeDispatch({type: 'like', like: null});
       } else {
         // post the like and dispatch the new like count to the state. Dispatching is already done in the getLikes and getLikeCount functions.
-        await postLike(item.media_id, token);
+        await postLike(parseInt(item.media_id), token);
         getLikes();
         getLikeCount();
       }
