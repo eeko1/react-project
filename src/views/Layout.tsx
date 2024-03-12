@@ -44,7 +44,7 @@ const Layout = () => {
               className="block p-4 text-center text-slate-50 hover:bg-slate-700"
               to="/logout"
             >
-              Logout
+              {user.username}
             </Link>
           </li>
         </>
