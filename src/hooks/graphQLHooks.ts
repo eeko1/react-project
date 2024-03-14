@@ -41,6 +41,7 @@ const useMedia = () => {
           created_at
           comments_count
           average_rating
+          likes_count
         }
       }
     `;

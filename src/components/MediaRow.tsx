@@ -2,6 +2,7 @@ import {Link} from 'react-router-dom';
 import {MediaItemWithOwner} from '../types/DBTypes';
 import {useUpdateContext, useUserContext} from '../hooks/ContextHooks';
 import {useMedia} from '../hooks/graphQLHooks';
+import Likes from './Likes';
 
 const MediaRow = (props: {item: MediaItemWithOwner}) => {
   const {item} = props;
@@ -67,8 +68,8 @@ const MediaRow = (props: {item: MediaItemWithOwner}) => {
             </>
           )}
         </div>
-        <p>Likes: {item.likes_count}</p>
-        <p>{item.owner.username}</p>
+        <p><Likes item={item} /></p>
+        <p>Posted By: {item.owner.username}</p>
         <p>Comments: {item.comments_count}</p>
         <p>Posted: {new Date(item.created_at).toLocaleString('fi-FI')}</p>
       </td>
