@@ -1,36 +1,40 @@
-# Hybrid Apps - React example
+# Hybridisovellukset kurssin projekti
 
-Open [this link in browser](https://users.metropolia.fi/~eemiko/react-graphql/) to see the app in action.
+Tästä [linkistä](https://users.metropolia.fi/~eemiko/Media-Application) pääsette käymään sivulla
 
 ---
 
-## React + TypeScript + Vite
+![Projektin kotisivu](./screenshot/homepage.png)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Tietoa Projektista
 
-Currently, two official plugins are available:
+ Tässä testikäyttäjä, jolla voi testata toimintoja.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+ - **Käyttäjätunnus**: Testimies
+ - **Salasana**: TestiSalasana1
 
-### Expanding the ESLint configuration
+ (Huom! Sinun pitää olla Metropolian verkossa tai käyttää VPN-yhteyttä, jotta näet sivun sisällön.)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Käytetyt Teknologiat
 
-- Configure the top-level `parserOptions` property like this:
+- **React.js**
+- **Tailwind CSS**
+- **MySQL**
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+## Backend
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Backend on toteutettu opettajan valmiiksi tehtyjen palvelimien avulla, jotka kattavat:
+- **Upload**
+- **Auth**
+- **Media_API**
+- **GraphQL_API**
+
+## Toiminnallisuudet
+
+Kaikki alla mainitut toiminnallisuudet toimivat moitteettomasti.
+
+- **Kirjautuminen/Rekisteröityminen**
+- **Julkaiseminen**
+- **Tykkääminen**
+- **Kommentointi**
+- **Oman julkaisun poistaminen**
