@@ -54,7 +54,6 @@ const Comments = ({item}: {item: MediaItemWithOwner}) => {
     <>
       {user && (
         <>
-          <h3 className="text-xl">Post Comment</h3>
           <form onSubmit={handleSubmit} ref={formRef}>
             <div className="flex w-4/5">
               <label className="w-1/3 p-6 text-end" htmlFor="comment">
@@ -68,9 +67,9 @@ const Comments = ({item}: {item: MediaItemWithOwner}) => {
                 onChange={handleInputChange}
               />
             </div>
-            <div className="flex w-4/5 justify-end">
+            <div className="flex justify-center">
               <button
-                className="m-3 w-1/3 rounded-md bg-slate-700 p-3"
+                className="m-3 w-1/3 rounded-md bg-slate-50 p-3 text-black"
                 type="submit"
               >
                 Post
@@ -85,7 +84,7 @@ const Comments = ({item}: {item: MediaItemWithOwner}) => {
           <ul>
             {comments.map((comment) => (
               <li key={comment.comment_id}>
-                <div className="rounded-md border border-slate-200 bg-slate-800 p-3 text-slate-100">
+                <div className="rounded-md border border-slate-200 bg-stone-400 p-3 text-slate-100">
                   <span className="font-bold text-slate-200">
                     On{' '}
                     {new Date(comment.created_at!).toLocaleDateString('fi-FI')}{' '}

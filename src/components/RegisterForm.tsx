@@ -34,14 +34,14 @@ const RegisterForm = () => {
   };
 
   const handleEmailBlur = async () => {
-    const result = await getEmailAvailable(inputs.email); // voidaan käyttää myös inputs objektia
+    const result = await getEmailAvailable(inputs.email);
     setEmailAvailable(result.available);
   };
 
   console.log(usernameAvailable, emailAvailable);
   return (
     <>
-      <h3 className="text-3xl">Register</h3>
+      <h3 className="flex justify-center text-3xl">Register</h3>
       <form onSubmit={handleSubmit} className="flex flex-col text-center">
         <div className="flex w-4/5">
           <label className="w-1/3 p-6 text-end" htmlFor="username">
@@ -94,9 +94,9 @@ const RegisterForm = () => {
             <p className="text-red-500">Email not available</p>
           </div>
         )}
-        <div className="flex w-4/5 justify-end">
+        <div className="flex justify-center">
           <button
-            className="m-3 w-1/3 rounded-md bg-slate-700 p-3"
+            className="p-6 rounded-md bg-slate-50 text-slate-600"
             type="submit"
           >
             Register

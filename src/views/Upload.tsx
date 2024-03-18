@@ -1,14 +1,12 @@
-import {useState} from 'react';
-import {useForm} from '../hooks/formHooks';
-// import {useFile, useMedia} from '../hooks/apiHooks';
-import {useFile, useMedia} from '../hooks/graphQLHooks';
-import {useNavigate} from 'react-router-dom';
+import { useState } from 'react';
+import { useForm } from '../hooks/formHooks';
+import { useFile, useMedia } from '../hooks/graphQLHooks';
+import { useNavigate } from 'react-router-dom';
 
-// Upload.tsx
 const Upload = () => {
   const [file, setFile] = useState<File | null>(null);
-  const {postFile} = useFile();
-  const {postMedia} = useMedia();
+  const { postFile } = useFile();
+  const { postMedia } = useMedia();
   const navigate = useNavigate();
 
   const initValues = {
@@ -22,12 +20,9 @@ const Upload = () => {
       if (!token || !file) {
         return;
       }
-      // TODO: call postFile function (see below)
       const fileResult = await postFile(file, token);
-      // TODO: call postMedia function (see below)
       const mediaResult = await postMedia(fileResult, inputs, token);
       alert(mediaResult.message);
-      // TODO: redirect to Home
       navigate('/');
     } catch (e) {
       console.log((e as Error).message);
@@ -40,14 +35,10 @@ const Upload = () => {
     }
   };
 
-  const {handleSubmit, handleInputChange, inputs} = useForm(
-    doUpload,
-    initValues,
-  );
+  const { handleSubmit, handleInputChange, inputs } = useForm(doUpload, initValues);
 
   return (
     <>
-      <h1 className="text-3xl">Upload</h1>
       <form onSubmit={handleSubmit}>
         <div className="flex w-4/5">
           <label className="w-1/3 p-6 text-end" htmlFor="title">
@@ -66,7 +57,7 @@ const Upload = () => {
             Description
           </label>
           <textarea
-            className="m-3 w-2/3  rounded-md border border-slate-500 p-3 text-slate-950"
+            className="m-3 w-2/3 rounded-md border border-slate-500 p-3 text-slate-950"
             name="description"
             rows={5}
             id="description"
@@ -86,23 +77,23 @@ const Upload = () => {
             onChange={handleFileChange}
           />
         </div>
-        <div className="flex w-4/5 justify-end">
+        <div className="flex justify-center">
           <img
-            className="w-2/3 p-6"
+            className="p-6 w-2/6"
+            style={{ maxWidth: '200px', height: 'auto' }}
             src={
               file
                 ? URL.createObjectURL(file)
                 : 'https://via.placeholder.com/200?text=Choose+image'
             }
             alt="preview"
-            width="200"
           />
         </div>
-        <div className="flex w-4/5 justify-end">
+        <div className="flex justify-center">
           <button
-            className="m-3 w-1/3 rounded-md bg-slate-600 p-3 disabled:text-slate-600"
+            className="p-6 rounded-md bg-slate-50 disabled:text-slate-600"
             type="submit"
-            disabled={file && inputs.title.length > 3 ? false : true}
+            disabled={file && inputs.title.length >= 3 ? false : true}
           >
             Upload
           </button>

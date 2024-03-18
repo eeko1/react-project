@@ -1,8 +1,10 @@
 import { Link, Outlet } from 'react-router-dom';
 import { useUserContext } from '../hooks/ContextHooks';
+import { useState } from 'react';
 
 const Layout = () => {
   const { user, handleAutoLogin } = useUserContext();
+  const [isHovering, setIsHovering] = useState(false);
 
   if (!user) {
     handleAutoLogin();
@@ -15,7 +17,7 @@ const Layout = () => {
           <ul className="flex justify-center items-center h-16">
             <li>
               <Link
-                className="block p-4 text-center hover:bg-slate-700 text-charcoal" // Applied Charcoal color here
+                className="block p-4 text-center hover:text-black text-charcoal"
                 to="/"
               >
                 Home
@@ -25,15 +27,15 @@ const Layout = () => {
               <>
                 <li>
                   <Link
-                    className="block p-4 text-center hover:bg-slate-700 text-charcoal" // Applied Charcoal color here
+                    className="block p-4 text-center hover:text-black"
                     to="/profile"
                   >
-                    Saved
+                    Profile
                   </Link>
                 </li>
                 <li>
                   <Link
-                    className="block p-4 text-center hover:bg-slate-700 text-charcoal" // Applied Charcoal color here
+                    className="block p-4 text-center hover:text-black text-charcoal"
                     to="/upload"
                   >
                     Upload
@@ -41,17 +43,19 @@ const Layout = () => {
                 </li>
                 <li>
                   <Link
-                    className="block p-4 text-center hover:bg-slate-700 text-charcoal" // Applied Charcoal color here
+                    className="block p-4 text-center hover:text-black text-charcoal"
                     to="/logout"
+                    onMouseEnter={() => setIsHovering(true)}
+                    onMouseLeave={() => setIsHovering(false)}
                   >
-                    {user.username}
+                    {isHovering ? 'Logout' : user.username}
                   </Link>
                 </li>
               </>
             ) : (
               <li>
                 <Link
-                  className="block p-4 text-center hover:bg-slate-700 text-charcoal" // Applied Charcoal color here
+                  className="block p-4 text-center hover:text-black text-charcoal"
                   to="/login"
                 >
                   Login

@@ -1,14 +1,14 @@
-import {Link} from 'react-router-dom';
-import {MediaItemWithOwner} from '../types/DBTypes';
-import {useUpdateContext, useUserContext} from '../hooks/ContextHooks';
-import {useMedia} from '../hooks/graphQLHooks';
+import { Link } from 'react-router-dom';
+import { MediaItemWithOwner } from '../types/DBTypes';
+import { useUpdateContext, useUserContext } from '../hooks/ContextHooks';
+import { useMedia } from '../hooks/graphQLHooks';
 import Likes from './Likes';
 
-const MediaRow = (props: {item: MediaItemWithOwner}) => {
-  const {item} = props;
-  const {user} = useUserContext();
-  const {deleteMedia} = useMedia();
-  const {update, setUpdate} = useUpdateContext();
+const MediaRow = (props: { item: MediaItemWithOwner }) => {
+  const { item } = props;
+  const { user } = useUserContext();
+  const { deleteMedia } = useMedia();
+  const { update, setUpdate } = useUpdateContext();
 
   const deleteHandler = async () => {
     const cnf = confirm('Are you sure you want to delete this media?');
@@ -27,12 +27,20 @@ const MediaRow = (props: {item: MediaItemWithOwner}) => {
       console.error('delete failed', (e as Error).message);
     }
   };
+
   return (
-    <tr className="*:p-4 bg-zinc-700">
-      <td className="flex flex-col items-center justify-center">
-        {/* If item.title exists, display it; otherwise, display "No title" */}
-        <h1 className="text-xl mb-4">{item.title ? item.title : "No title"}</h1>
-        {/* Wrap the image with Link to make it clickable and navigate to "/single" */}
+    <tr className="*:p-4 bg-stone-400">
+      <td className="flex flex-col items-center justify-center relative">
+        <div className="text-xl mb-4">{item.title ? item.title : "No title"}</div>
+        {user && (user.user_id === item.user_id || user.level_name === 'Admin') && (
+          <button
+            onClick={deleteHandler}
+            className="absolute top-0 right-0 text-lg text-red-500"
+            style={{ marginRight: '1rem', marginTop: '0.5rem' }}
+          >
+            X
+          </button>
+        )}
         <Link to="/single" state={item}>
           <img
             className="h-60 w-72 object-cover cursor-pointer"
@@ -44,36 +52,23 @@ const MediaRow = (props: {item: MediaItemWithOwner}) => {
 
       <td className="">
         <div className="flex flex-col">
-        <p className="mb-4" style={{ fontFamily: "'Freight Sans', sans-serif" }}>
-  {item.description
-    ? item.description.length > 34
-      ? `${item.description.substring(0, 34)}...`
-      : item.description
-    : "No description"}
-</p>
-          {user && (user.user_id === item.user_id || user.level_name === 'Admin') && (
-            <>
-              <button
-                className="bg-green-700 p-2 hover:bg-green-600"
-                onClick={() => console.log('modify', item)}
-              >
-                Modify
-              </button>
-              <button
-                className="bg-rose-500 p-2 hover:bg-rose-400"
-                onClick={deleteHandler}
-              >
-                Delete
-              </button>
-            </>
-          )}
+          <p className="mb-4" style={{ fontFamily: "'Freight Sans', sans-serif" }}>
+            {item.description
+              ? item.description.length > 34
+                ? `${item.description.substring(0, 34)}...`
+                : item.description
+              : "No description"}
+          </p>
+          <div className="mt-auto">
+            <p><Likes item={item} /></p>
+            <p>{item.owner.username}</p>
+            <p>Comments: {item.comments_count}</p>
+            <p>{new Date(item.created_at).toLocaleString('fi-FI')}</p>
+          </div>
         </div>
-        <p><Likes item={item} /></p>
-        <p>Posted By: {item.owner.username}</p>
-        <p>Comments: {item.comments_count}</p>
-        <p>Posted: {new Date(item.created_at).toLocaleString('fi-FI')}</p>
       </td>
     </tr>
   );
 };
+
 export default MediaRow;
